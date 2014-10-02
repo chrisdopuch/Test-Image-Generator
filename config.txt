@@ -1,0 +1,6 @@
+{
+    "backgroundDirs": "path/to/dir",
+    "targetsDir": "path/to/dir",
+    "maxImages": 20,
+    "targetSetSizes": 1
+}
