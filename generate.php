@@ -5,11 +5,11 @@
 	require 'parseConfig.php';
 	require 'discoverDirs.php';
 
-	$CONFIGFILE = "config.txt";
+	$CONFIG_FILE = "config.txt";
 
-	$config = parseConfig($CONFIGFILE);
+	$config = parse_config($CONFIGFILE);
 
-	$config["targets"] = discoverTargets($config["targetsDir"]);
-	$config["backgrounds"] = discoverBackgrounds($config["backgroundsDir"]);
+	$config["targets"] = discover_dirs($config["targetsDir"]);
+	$config["backgrounds"] = discover_dirs($config["backgroundsDir"]);
 
 ?>
