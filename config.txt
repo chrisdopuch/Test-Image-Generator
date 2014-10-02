@@ -1,6 +1,7 @@
 {
-    "backgroundDirs": "path/to/dir",
-    "targetsDir": "path/to/dir",
+    "backgroundDirs": "backgrounds",
+    "targetsDir": "targets",
     "maxImages": 20,
-    "targetSetSizes": 1
+    "targetSetSizes": [0, 1, 2, 3, 4],
+    "filters": ["some", "filter", "names"]
 }
