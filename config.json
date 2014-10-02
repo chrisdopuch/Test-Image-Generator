@@ -1,5 +1,5 @@
 {
-    "backgroundDirs": "backgrounds",
+    "backgroundsDir": "backgrounds",
     "targetsDir": "targets",
     "maxImages": 20,
     "targetSetSizes": [0, 1, 2, 3, 4],
