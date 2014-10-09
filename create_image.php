@@ -5,17 +5,20 @@
 	error_reporting(-1);
 
 	require "get_positions.php";
-
-	$file_name = "backgrounds/field1.jpg";
-	$output_file_name = "test_output.jpg";
-	$target_dir = "targets/*.png";
-
-	$num_targets = 5;
-	$targets_used = 0;
+	require "parse_target_name.php";
 	
-function create_image($input) {
+	
+function create_image($input, $num) {
+
+	$output_dir = "output/";
+
+	print "_________ VAR DUMP INPUT __________\n";
+	var_dump($input);
 
 	try {
+
+		$targets_used = 0;
+		$num_targets = $input["targetSetSizes"];
 
 		$base = new Imagick($input["backgroundsDir"] . "/" . $input["background"]);
 
@@ -24,27 +27,33 @@ function create_image($input) {
 
 		$targets_array = array();
 		
-		var_dump($targets);
+		//var_dump($targets);
 
 		foreach($targets as $target) {
 			$targets_used++;
-			array_push($targets_array, array( "file_name" => ""));
 			if($targets_used >= $num_targets)
 				break;
+			array_push($targets_array, array( "file_name" => $targets[rand(0, count($targets))]));
+			
 		}
 
 		$targets_array = get_positions($base, 200, $targets_array);
 
-		var_dump($targets_array);
+		//var_dump($targets_array);
 		
 		//Initialize targets array index.
 		$input['targets'] = array();
 
+		print "_________ VAR DUMP TARGETS ARRAY __________\n";
+		var_dump($targets_array);
+
 		
 		foreach($targets_array as $target){
+
+			var_dump($target["file_name"]);
 		
 			//Load image
-			$not_rotated = imagecreatefrompng($target['file_name']);
+			$not_rotated = imagecreatefrompng($input["targetsDir"] . "/" . $target["file_name"]);
 			
 			//Initialize alpha
 			$pngTransparency = imagecolorallocatealpha($not_rotated , 0, 0, 0, 127);
@@ -75,19 +84,22 @@ function create_image($input) {
 			
 			array_push($input['targets'], $info);
 
+			$target_img->clear();
+
 		}
 
-		$base->writeImage($output_file_name);
+		$base->writeImage($output_dir . $num . ".jpg");
 		
 
 	} catch (Exception $e) {
 		echo "Caught exception: " . $e->getMessage() . "\n";
 		$base->clear();
-		$targets->clear();
+		$target_img->clear();
+		//$targets->clear();
 	}
 	
 	$base->clear();
-	$targets->clear();
+	//$targets->clear();
 	
 	
 	return($input);

@@ -13,8 +13,8 @@
 
 	$config = parse_config($CONFIG_FILE);
 
-	$config["targets"] = discover_dirs($config["targetsDir"][0]);
-	$config["backgrounds"] = array(discover_dirs($config["backgroundsDir"][0])); // make this an array because we don't actually need all combinations of target images
+	$config["targets_set"] = array(discover_dirs($config["targetsDir"][0]));
+	$config["background"] = discover_dirs($config["backgroundsDir"][0]); // make this an array because we don't actually need all combinations of target images
 	//var_dump($config);
 
 	$combinations = combine($config);
@@ -25,7 +25,7 @@
 	// iterate through combinations and call the create_image function with that combination of params
 	for( $i = 0; $i < count($combinations); $i++ ) {
 		// push its output onto the output array
-		array_push( $output_array, create_image($combinations[$i]));
+		array_push( $output_array, create_image($combinations[$i], $i));
 	}
 
 	// save the output array to file as JSON data
