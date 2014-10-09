@@ -1,7 +1,7 @@
 {
-    "backgroundsDir": "backgrounds",
-    "targetsDir": "targets",
-    "maxImages": 20,
+    "backgroundsDir": ["backgrounds"],
+    "targetsDir": ["targets"],
+    "maxImages": [20],
     "targetSetSizes": [0, 1, 2, 3, 4],
     "filters": ["some", "filter", "names"]
 }

@@ -5,17 +5,31 @@
 	require 'parse_config.php';
 	require 'discover_dirs.php';
 	require 'write_json.php';
+	require 'combine.php';
+	require 'create_image.php';
 
 	$CONFIG_FILE = "config.json";
 	$OUTPUT_FILE = "output.json";
 
 	$config = parse_config($CONFIG_FILE);
 
-	$config["targets"] = discover_dirs($config["targetsDir"]);
-	$config["backgrounds"] = discover_dirs($config["backgroundsDir"]);
-	print($config["backgroundsDir"]);
+	$config["targets"] = discover_dirs($config["targetsDir"][0]);
+	$config["backgrounds"] = array(discover_dirs($config["backgroundsDir"][0])); // make this an array because we don't actually need all combinations of target images
+	//var_dump($config);
 
-	// loop through the combinations of options and call the image generation for each combination
+	$combinations = combine($config);
+	$output_array = array();
+
+	//var_dump($combinations);
+
+	// iterate through combinations and call the create_image function with that combination of params
+	for( $i = 0; $i < count($combinations); $i++ ) {
+		// push its output onto the output array
+		array_push( $output_array, create_image($combinations[$i]));
+	}
+
+	// save the output array to file as JSON data
+	write_json($output_array, $OUTPUT_FILE);
 	
 
 ?>
