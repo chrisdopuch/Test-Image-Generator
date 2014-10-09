@@ -13,8 +13,8 @@
 
 	$config = parse_config($CONFIG_FILE);
 
-	$config["targets"] = discover_dirs($config["targetsDir"][0]);
-	$config["backgrounds"] = array(discover_dirs($config["backgroundsDir"][0])); // make this an array because we don't actually need all combinations of target images
+	$config["targets_set"] = discover_dirs($config["targetsDir"][0]);
+	$config["backgrounds_set"] = array(discover_dirs($config["backgroundsDir"][0])); // make this an array because we don't actually need all combinations of target images
 	//var_dump($config);
 
 	$combinations = combine($config);

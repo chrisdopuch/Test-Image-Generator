@@ -4,7 +4,7 @@
 
 		// if there are no remaining 
 		if ( empty( $remaining ) ) {
-			print "No items in remaining array \n";
+			//print "No items in remaining array \n";
 			return array();
 		}
 
@@ -18,7 +18,7 @@
 		$result_array = combine( $remaining );
 
 			if( empty( $result_array ) ) {
-				print "Result array was empty, add new items to it \n";
+				//print "Result array was empty, add new items to it \n";
 				// if the result array was empty, then push a new assoc array for each item in $value 
 				for ( $i = 0; $i < count($value); $i++ ) {
 					array_push( $result_array, array(
@@ -26,12 +26,12 @@
 						) );
 				}
 			} else {
-				print "Call to combine with result array not empty\n";
+				//print "Call to combine with result array not empty\n";
 				// otherwise, iterate from the bottom of $result_array up to the top
 				for ( $i = (count( $result_array ) - 1); $i >= 0; $i-- ) {
 					//$handle = fopen ("php://stdin","r");
 					//$line = fgets($handle);
-					print "Index " . $i . " of result array\n";
+					//print "Index " . $i . " of result array\n";
 					// get the row at that index and add the first value to it
 					$row = $result_array[$i];
 					$row[$key] = $value[0];
