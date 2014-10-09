@@ -1,7 +1,18 @@
 {
     "backgroundsDir": ["backgrounds"],
     "targetsDir": ["targets"],
-    "maxImages": [20],
+    "maxImages": [2000],
     "targetSetSizes": [0, 1, 2, 3, 4],
-    "filters": ["some", "filter", "names"]
+    "filters": [
+    			"none", 
+    			"poisson", 
+    			"laplacian",
+    			"blurHigh",
+    			"blurMid",
+    			"blurLow",
+    			"blurRadialHigh",
+    			"blurRadialLow",
+    			"darken",
+    			"brighten"
+    			]
 }
