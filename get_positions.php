@@ -26,7 +26,7 @@
 	function get_positions($img, $min_dist, $array) {
 
 		if(empty($array)) {
-			print "Error: $array param to get_positions is empty!\n";
+			print "Hey man, $array param to get_positions is empty!\n";
 			return NULL;
 		}
 
@@ -66,8 +66,8 @@
 							$failures += 1;
 							$x = rand(0, $width - $min_dist);
 							$y = rand(0, $height - $min_dist);
-							//print "Too close \n";
-							//print "Fails: " . $failures . "\n";
+							print "Too close \n";
+							print "Fails: " . $failures . "\n";
 							break;
 						}
 						$too_close = false;
@@ -79,7 +79,10 @@
 						// too many fails, we are stuck, so just start over
 						$epic_fail = true;
 						$locations = array(); // reset locations
-						//print "Too many fails\n";
+						$failures = 0;
+						print "EPIC FAIL: Too many fails\n";
+						var_dump($array);
+						print $img->getImageFilename();
 						break 2; // break out to the outermost loop
 					}
 

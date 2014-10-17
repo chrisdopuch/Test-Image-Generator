@@ -25,11 +25,17 @@
 	// iterate through combinations and call the create_image function with that combination of params
 	for( $i = 0; $i < count($combinations); $i++ ) {
 		// push its output onto the output array
-		array_push( $output_array, create_image($combinations[$i], $i));
+		try {
+			array_push( $output_array, create_image($combinations[$i], $i));
+		} catch (Exception $e) {
+			echo $e->errorMessage();
+		}
 	}
 
 	// save the output array to file as JSON data
 	write_json($output_array, $OUTPUT_FILE);
+
+	print count($combinations);
 	
 
 ?>
