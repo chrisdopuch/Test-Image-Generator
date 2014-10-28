@@ -13,13 +13,15 @@ function create_image($input, $num) {
 
 	$output_dir = "output/";
 
-	print "_________ VAR DUMP INPUT __________\n";
-	var_dump($input);
+	//print "_________ VAR DUMP INPUT __________\n";
+	//var_dump($input);
 
 	try {
 
 		$targets_used = 0;
 		$num_targets = $input["targetSetSizes"];
+
+		print "Num Targets: " . $num_targets . "\n";
 
 		$base = new Imagick($input["backgroundsDir"] . "/" . $input["background"]);
 
@@ -27,25 +29,29 @@ function create_image($input, $num) {
 		$targets = $input["targets_set"];
 
 		$targets_array = array();
+
+		print "Targets array initial size: " . count($targets_array) . "\n";
 		
-		print "___________________VAR DUMP TARGETS __________\n";
-		var_dump($targets);
+		//print "___________________VAR DUMP TARGETS __________\n";
+		//var_dump($targets);
 
 		for ( $i = 0; $i < $num_targets; $i++ ) {
 			//$targets_used++;
 			//if($targets_used >= $num_targets)
 			//	break;
-			array_push($targets_array, array( "file_name" => $targets[rand(0, count($targets))]));
+			array_push($targets_array, array( "file_name" => $targets[rand(0, count($targets) - 1)]));
 			
 		}
 
-		print "_________ VAR DUMP TARGETS ARRAY __________\n";
-		var_dump($targets_array);
+		print "Targets array final size: " . count($targets_array) . "\n";
+
+		//print "_________ VAR DUMP TARGETS ARRAY __________\n";
+		//var_dump($targets_array);
 
 		$targets_array = get_positions($base, 100, $targets_array);
 
-		print "_________ VAR DUMP TARGETS ARRAY POST GET POSITIONS __________\n";
-		var_dump($targets_array);
+		//print "_________ VAR DUMP TARGETS ARRAY POST GET POSITIONS __________\n";
+		//var_dump($targets_array);
 		
 		//Initialize targets array index.
 		$input['targets'] = array();
@@ -55,7 +61,7 @@ function create_image($input, $num) {
 		if( !empty($targets_array[0]['file_name']) ) {
 			foreach($targets_array as $target){
 
-				var_dump($target["file_name"]);
+				//var_dump($target["file_name"]);
 			
 				//Load image
 				$not_rotated = imagecreatefrompng($input["targetsDir"] . "/" . $target["file_name"]);
