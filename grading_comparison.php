@@ -5,27 +5,35 @@ $grade = array();
 
 if( $target1["letter"] == $target2["letter"] ) {
 	$grade['letter accuracy'] = 1;
-	//array_push($grade, "Letter Match.");
 } else {
 	$grade['letter accuracy'] = 0;
 }
 
 if( $target1["letter_color"] == $target2["letter_color"] ) {
-	array_push($grade, "Letter Color Match.");
+	$grade['letter color'] = 1;
+} else {
+	$grade['letter color'] = 0;
 }
 
-if( $target1["shape"] == $target2["shape"] ) {
-
-	// TODO: handle the 4-gon case
-	// "4-gon" == [ "square", "rectangle", "rhombus", "parallelogram", etc...]
-
-	array_push($grade, "Shape Match.");
+//First target passed in is answer, second target is key.
+if( $target1["shape"] == "4-gon") {
+	//Handles various naming for four-sided shapes.
+	if( $target2["shape"] == "square" || "rhombus" || "parallelogram" || "rectangle" || "trapezoid" || "kite") {
+		$grade['shape accuracy'] = 1;
+	}
+} else if ( $target1["shape"] == $target2["shape"] ) {
+	$grade['shape accuracy'] = 1;
+} else {
+	$grade['shape accuracy'] = 0;
 }
 
 if( $target1["shape_color"] == $target2["shape_color"] ) {
-	array_push($grade, "Shape Color Match.");
+	$grade['shape color accuracy'] = 1;
+} else {
+	$grade['shape color accuracy'] = 0;
 }
 
+//Calculate distance between two targets.
 $x1 = $target1["x"];
 $x2 = $target2["x"];
 
@@ -37,7 +45,6 @@ $c = pow(($y1 - $y2), 2);
 
 $distance = sqrt($b + $c);
 
-// array_push($grade, "Distance between two images is: " . $distance);
 $grade["distance from key"] = $distance;
 
 return($grade);
