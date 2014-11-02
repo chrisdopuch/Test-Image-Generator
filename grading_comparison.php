@@ -4,7 +4,10 @@ function grade_target($target1, $target2) {
 $grade = array();
 
 if( $target1["letter"] == $target2["letter"] ) {
-	array_push($grade, "Letter Match.");
+	$grade['letter accuracy'] = 1;
+	//array_push($grade, "Letter Match.");
+} else {
+	$grade['letter accuracy'] = 0;
 }
 
 if( $target1["letter_color"] == $target2["letter_color"] ) {
@@ -12,6 +15,10 @@ if( $target1["letter_color"] == $target2["letter_color"] ) {
 }
 
 if( $target1["shape"] == $target2["shape"] ) {
+
+	// TODO: handle the 4-gon case
+	// "4-gon" == [ "square", "rectangle", "rhombus", "parallelogram", etc...]
+
 	array_push($grade, "Shape Match.");
 }
 
@@ -30,7 +37,8 @@ $c = pow(($y1 - $y2), 2);
 
 $distance = sqrt($b + $c);
 
-array_push($grade, "Distance between two images is: " . $distance);
+// array_push($grade, "Distance between two images is: " . $distance);
+$grade["distance from key"] = $distance;
 
 return($grade);
 }
