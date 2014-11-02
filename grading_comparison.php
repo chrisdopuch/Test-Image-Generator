@@ -10,9 +10,9 @@ if( $target1["letter"] == $target2["letter"] ) {
 }
 
 if( $target1["letter_color"] == $target2["letter_color"] ) {
-	$grade['letter color'] = 1;
+	$grade['letter color accuracy'] = 1;
 } else {
-	$grade['letter color'] = 0;
+	$grade['letter color accuracy'] = 0;
 }
 
 //First target passed in is answer, second target is key.
