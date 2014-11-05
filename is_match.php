@@ -36,6 +36,10 @@
 	$target5["x"] = 25;
 	$target5["y"] = 25;
 
+	$target6 = array();
+	$target6["x"] = 50;
+	$target6["y"] = 50;
+
 	print "Test 1: correct answer is true\n";
 	print is_match( $target1, $target1, $threshold ) . "\n";
 
@@ -68,6 +72,9 @@
 
 	print "Test 11: correct answer is false\n";
 	print is_match( $target2, $target3, $threshold ) . "\n";
+
+	print "Test 12: correct answer is true\n";
+	print is_match( $target1, $target6, $threshold ) . "\n";
 
 	*/
 

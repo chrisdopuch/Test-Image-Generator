@@ -3,6 +3,7 @@
 	require "parse_config.php";
 	require "write_json.php";
 	require "is_match.php";
+	require "grading_comparison.php";
 
 	$THRESHOLD = 100;
 	$OUTPUT = "report.json";
@@ -100,10 +101,31 @@
 
 						}
 
-						// TODO false pos
-						$false_pos = count($answer_property) - count($matches);
+						// execute grading logic on each of the matched targets and add the grade info to the matches array
+						for ( $i = 0; $i < count($matches); $i++ ) {
 
-						var_dump($matches);
+							$grade = grade_target( $matches[$i]["key_target"], $matches[$i]["answer_target"] );
+
+							$this_match = $matches[$i];
+
+							$matches[$i] = array_merge( $this_match, $grade );
+
+						}
+
+						// record the accuracy parameters for this image
+						$false_pos = count($answer_property) - count($matches);
+						$image["false positives"] = $false_pos;
+						$num_found = count($matches);
+						$image["found targets"] = $num_found;
+						$image["missed targets"] = $misses;
+						$image["matched targets"] = $matches;
+
+						//var_dump($matches);
+						print "Number of targets: " . $image["number of targets"] . "\n";
+						print "Found targets: " . $image["found targets"] . "\n";
+						print "False positives: " . $image["false positives"] . "\n";
+						print "Missed targets: " . $image["missed targets"] . "\n";
+						print "\n\n";
 
 
 					} else {

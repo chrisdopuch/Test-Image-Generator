@@ -4,9 +4,9 @@ function grade_target($target1, $target2) {
 $grade = array();
 
 if( $target1["letter"] == $target2["letter"] ) {
-	$grade['letter accuracy'] = 1;
+	$grade['letter character accuracy'] = 1;
 } else {
-	$grade['letter accuracy'] = 0;
+	$grade['letter character accuracy'] = 0;
 }
 
 if( $target1["letter_color"] == $target2["letter_color"] ) {
@@ -38,7 +38,7 @@ $x1 = $target1["x"];
 $x2 = $target2["x"];
 
 $y1 = $target1["y"];
-$y2 = $target2["y"]:
+$y2 = $target2["y"];
 
 $b = pow(($x1 - $x2), 2);
 $c = pow(($y1 - $y2), 2);
