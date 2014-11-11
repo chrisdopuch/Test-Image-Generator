@@ -47,6 +47,12 @@ $distance = sqrt($b + $c);
 
 $grade["distance from key"] = $distance;
 
+print "Letter character accuracy: " . $grade['letter character accuracy'] . "\n";
+print "Letter color accuracy: " . $grade['letter color accuracy'] . "\n";
+print "Shape accuracy: " . $grade['shape accuracy'] . "\n";
+print "Shape color accuracy: " . $grade['shape color accuracy'] . "\n";
+print "Distance from key target: " . $grade['distance from key'] . "\n\n";
+
 return($grade);
 }
 ?>
