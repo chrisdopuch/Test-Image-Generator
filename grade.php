@@ -5,7 +5,7 @@
 	require "is_match.php";
 	require "grading_comparison.php";
 
-	$THRESHOLD = 100;
+	$THRESHOLD = 300;
 	$OUTPUT = "report.json";
 
 	$options = getopt("f:l:");
@@ -33,7 +33,7 @@
 	// for each image
 	for( $j = 0; $j < count($key); $j++ ) {
 
-		print "Next image: " . $j . "\n----------\n";
+		print "Next image: " . $j . "\n";
 
 		// new assoc array to store all data for this image
 		// gets pushed onto report when finished
@@ -45,19 +45,16 @@
 		$misses = 0;
 		$num_found = 0;
 
-
-
 		foreach ($key_object as $property => $value) {
 
 			// print "Next key: " . $property . "\n";
-
 			$key_property = $key_object[$property];
-			$answer_property = $answer_object[$property];
+
 
 			switch($property) {
 
 				case "targetSetSizes": 
-					$image["number of targets"] = $answer_property;
+					$image["number of targets"] = $key_property;
 					break;
 
 				case "filters":
@@ -66,6 +63,8 @@
 					break;
 
 				case "targets":	
+
+					$answer_property = $answer_object[$property];
 					
 					// check if there are any targets
 					if( count($key_property) > 0 || count($answer_property) > 0 ) {
