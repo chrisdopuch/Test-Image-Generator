@@ -30,8 +30,57 @@
 
 	// print "Count of key: " . count($key) . "\n";
 
+	// open two files to write for CSV, one for targets, one for images
+	$targets_fp = fopen('targets.csv', 'w');
+	$images_fp = fopen('images.csv', 'w');
+
+	// print the headers for the CSV files
+
+	// images.csv will contain the metrics for the each entire image
+	fputcsv($images_fp, array(
+
+		"image",
+		"background",
+		"filter",
+		"targets_count", // target set size
+		"found_targets",
+		"missed_targets",
+		"false_positives"
+
+	));
+
+	// targets.csv will contain the matched targets, the missed targets, and the false positives
+	fputcsv($targets_fp, array(
+
+		"image",
+		"background",
+		"filter",
+		"status", // either 'matched', 'missed', or 'false positive'
+		"letter_color_accuracy",
+		"letter_character_accuracy",
+		"shape_accuracy",
+		"shape_color_accuracy",
+		"distance",
+		"key_letter_color",
+		"key_letter_character",
+		"key_shape",
+		"key_shape_color",
+		"key_x",
+		"key_y",
+		"answer_letter_color",
+		"answer_letter_character",
+		"answer_shape",
+		"answer_shape_color",
+		"answer_x",
+		"answer_y",
+		"target_angle"
+
+	));
+
 	// for each image
 	for( $j = 0; $j < count($key); $j++ ) {
+
+		$image_csv = array();
 
 		print "Next image: " . $j . "\n";
 
@@ -74,6 +123,13 @@
 						$matches = array();
 						$match_index = 0;
 
+						//keep track of which answer targets are matches (we will iterate through non-matches and log them to the CSV file as false positives)
+						$answer_matches = array();
+
+						for ( $answer_index = 0; $answer_index < count($answer_property); $answer_index++ ) {
+							$answer_matches[$answer_index] = false;
+						}
+
 						for ( $key_index = 0; $key_index < count($key_property); $key_index++ ) {
 
 							//print "outer loop " . $key_index . " of key target array\n";
@@ -88,6 +144,7 @@
 
 									// match found, add to the matches array
 									$matched = true;
+									$answer_matches[$answer_index] = true;
 									$num_found++;
 
 									$match = array();
@@ -99,12 +156,81 @@
 
 							}
 
-							if ( !$matched ) 
+							if ( !$matched ) {
+
 								$misses++;
+
+								// log the missed target to the CSV file
+								$target_csv = array();
+								$target_csv[0] = $j;
+								$target_csv[1] = $key_object['background'];
+								$target_csv[2] = $key_object['filters'];
+								$target_csv[3] = 'missed';
+								$target_csv[4] = NULL;
+								$target_csv[5] = NULL;
+								$target_csv[6] = NULL;
+								$target_csv[7] = NULL;
+								$target_csv[8] = NULL;
+								$target_csv[9] = $key_property[$key_index]['letter_color'];
+								$target_csv[10] = $key_property[$key_index]['letter'];
+								$target_csv[11] = $key_property[$key_index]['shape'];
+								$target_csv[12] = $key_property[$key_index]['shape_color'];
+								$target_csv[13] = $key_property[$key_index]['x'];
+								$target_csv[14] = $key_property[$key_index]['y'];
+								$target_csv[15] = NULL;
+								$target_csv[16] = NULL;
+								$target_csv[17] = NULL;
+								$target_csv[18] = NULL;
+								$target_csv[19] = NULL;
+								$target_csv[20] = NULL;
+								$target_csv[21] = $key_property[$key_index]['angle'];
+
+
+								// write the target row to the target.csv
+								fputcsv($targets_fp, $target_csv);
+
+							}
 
 						}
 
-						// check if there were no key targets but there are false positives
+						// loop through the answer targets, and for each unmatched target, add a row to the CSV as a false positive
+						//keep track of which answer targets are matches (we will iterate through non-matches and log them to the CSV file as false positives)
+						for ( $answer_index = 0; $answer_index < count($answer_property); $answer_index++ ) {
+
+							if ( $answer_matches[$answer_index] == false ) {
+
+								// false positive, let's log it
+								$target_csv = array();
+								$target_csv[0] = $j;
+								$target_csv[1] = $key_object['background'];
+								$target_csv[2] = $key_object['filters'];
+								$target_csv[3] = 'false positive';
+								$target_csv[4] = NULL;
+								$target_csv[5] = NULL;
+								$target_csv[6] = NULL;
+								$target_csv[7] = NULL;
+								$target_csv[8] = NULL;
+								$target_csv[9] = NULL;
+								$target_csv[10] = NULL;
+								$target_csv[11] = NULL;
+								$target_csv[12] = NULL;
+								$target_csv[13] = NULL;
+								$target_csv[14] = NULL;
+								$target_csv[15] = $answer_property[$answer_index]['letter_color'];
+								$target_csv[16] = $answer_property[$answer_index]['letter'];
+								$target_csv[17] = $answer_property[$answer_index]['shape'];
+								$target_csv[18] = $answer_property[$answer_index]['shape_color'];
+								$target_csv[19] = $answer_property[$answer_index]['x'];
+								$target_csv[20] = $answer_property[$answer_index]['y'];
+								$target_csv[21] = NULL;
+
+
+								// write the target row to the target.csv
+								fputcsv($targets_fp, $target_csv);
+
+							}
+
+						}
 
 
 						// execute grading logic on each of the matched targets and add the grade info to the matches array
@@ -115,6 +241,34 @@
 							$this_match = $matches[$i];
 
 							$matches[$i] = array_merge( $this_match, $grade );
+
+							// write matched target to the CSV
+							$target_csv = array();
+							$target_csv[0] = $j;
+							$target_csv[1] = $key_object['background'];
+							$target_csv[2] = $key_object['filters'];
+							$target_csv[3] = 'matched';
+							$target_csv[4] = $grade['letter color accuracy'];
+							$target_csv[5] = $grade['letter character accuracy'];
+							$target_csv[6] = $grade['shape accuracy'];
+							$target_csv[7] = $grade['shape color accuracy'];
+							$target_csv[8] = $grade['distance from key'];
+							$target_csv[9] = $matches[$i]['key_target']['letter_color'];
+							$target_csv[10] = $matches[$i]['key_target']['letter'];
+							$target_csv[11] = $matches[$i]['key_target']['shape'];
+							$target_csv[12] = $matches[$i]['key_target']['shape_color'];
+							$target_csv[13] = $matches[$i]['key_target']['x'];
+							$target_csv[14] = $matches[$i]['key_target']['y'];
+							$target_csv[15] = $matches[$i]['answer_target']['letter_color'];
+							$target_csv[16] = $matches[$i]['answer_target']['letter'];
+							$target_csv[17] = $matches[$i]['answer_target']['shape'];
+							$target_csv[18] = $matches[$i]['answer_target']['shape_color'];
+							$target_csv[19] = $matches[$i]['answer_target']['x'];
+							$target_csv[20] = $matches[$i]['answer_target']['y'];
+							$target_csv[21] = $matches[$i]['key_target']['angle'];
+
+							// write the target row to the target.csv
+							fputcsv($targets_fp, $target_csv);
 
 						}
 
@@ -128,24 +282,17 @@
 						$image["matched targets"] = $matches;
 
 						//var_dump($matches);
-						
-
-
+		
 					} else {
 						// handle case of no target keys or answers
 						$image["found targets"] = 0;
 						$image["false positives"] = 0;
 						$image["missed targets"] = 0;
 
-						
-
 						//print "No targets, moving on\n";
 						//print "Count of key_property: " . count($key_property) . "\n";
 						//print "Count of answer_property: " . count($answer_property) . "\n";
 					}
-
-
-					
 
 					break;
 
@@ -164,12 +311,25 @@
 		// we have gone through each attribute, so $image is done, push onto $report
 		array_push($report, $image);
 
+		$image_csv[0] = $j;
+		$image_csv[1] = $key_object['background'];
+		$image_csv[2] = $key_object['filters'];
+		$image_csv[3] = $key_object['targetSetSizes'];
+		$image_csv[4] = $image['found targets'];
+		$image_csv[5] = $image['missed targets'];
+		$image_csv[6] = $image['false positives'];
+		
+		// write the image row to the image.csv
+		fputcsv($images_fp, $image_csv);
 	}
 
 	// print "Finished main loop \n";
 
 	// log the report to JSON file
 	write_json($report, $OUTPUT);
+
+	fclose($images_fp);
+	fclose($targets_fp);
 
 	function cmp($a, $b) {
 	    if ($a["x"] == $b["x"]) {
