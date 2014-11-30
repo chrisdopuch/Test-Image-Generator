@@ -18,8 +18,10 @@ if( $target1["letter_color"] == $target2["letter_color"] ) {
 //First target passed in is answer, second target is key.
 if( $target1["shape"] == "4-gon") {
 	//Handles various naming for four-sided shapes.
-	if( $target2["shape"] == "square" || "rhombus" || "parallelogram" || "rectangle" || "trapezoid" || "kite") {
+	if( $target2["shape"] == "square" || $target2["shape"] == "rhombus" || $target2["shape"] == "parallelogram" || $target2["shape"] == "rectangle" || $target2["shape"] == "trapezoid" || $target2["shape"] == "kite") {
 		$grade['shape accuracy'] = 1;
+	} else {
+		$grade['shape accuracy'] = 0;
 	}
 } else if ( $target1["shape"] == $target2["shape"] ) {
 	$grade['shape accuracy'] = 1;
